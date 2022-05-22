@@ -153,7 +153,7 @@ public class PlayerShoot : NetworkBehaviour
     private void GotKill() 
     {
         Debug.Log("registered kill in playershoot");
-        DeathManager.PlayerGotKill(this.netIdentity.connectionToClient);
+        DeathManager.PlayerGotKill(this.playerScript.networkGamePlayerIdentity);
     }
     private void GotPlayerHit()
     {

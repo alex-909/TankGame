@@ -10,7 +10,7 @@ public enum PlayerStat
 }
 public class PlayerScore
 {
-    public NetworkConnection owner;
+    public NetworkIdentity owner;
 
     public string playerName;
     public Color playerColor;

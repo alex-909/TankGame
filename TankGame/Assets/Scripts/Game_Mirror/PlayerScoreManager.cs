@@ -28,7 +28,7 @@ public class PlayerScoreManager : NetworkBehaviour
             Color color = GameAssets.i.GetColor(player.GetComponent<ApplyMaterials>().tankColor);
             PlayerScore playerScore = new PlayerScore()
             {
-                owner = player.netIdentity.connectionToClient,
+                owner = player.networkGamePlayerIdentity,
                 playerName = player.playerName,
                 playerColor = color,
                 kills = 0,
@@ -41,7 +41,7 @@ public class PlayerScoreManager : NetworkBehaviour
     }
 
 	#endregion
-	public void IncreaseStatInPlayer(PlayerStat stat, NetworkConnection owner)
+	public void IncreaseStatInPlayer(PlayerStat stat, NetworkIdentity owner)
     {
         PlayerScore playerScore = GetScoreOfPlayer(owner);
 
@@ -61,7 +61,7 @@ public class PlayerScoreManager : NetworkBehaviour
         }
         SendScoreUpdate();
     }
-    public int GetStatInPlayer(PlayerStat stat, NetworkConnection owner)
+    public int GetStatInPlayer(PlayerStat stat, NetworkIdentity owner)
     {
         PlayerScore playerScore = GetScoreOfPlayer(owner);
         return stat switch
@@ -72,7 +72,7 @@ public class PlayerScoreManager : NetworkBehaviour
             _ => 0
         };
     }
-    public PlayerScore GetScoreOfPlayer(NetworkConnection player) 
+    public PlayerScore GetScoreOfPlayer(NetworkIdentity player) 
     {
         for (int i = 0; i < playerScores.Count; i++) 
         {

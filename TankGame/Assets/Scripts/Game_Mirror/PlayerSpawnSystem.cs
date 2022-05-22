@@ -56,6 +56,7 @@ namespace DapperDino.Mirror.Tutorials.Lobby
             var player_script = playerInstance.GetComponent<PlayerScript>();
             var game_player = conn.identity.gameObject.GetComponent<NetworkGamePlayerTG>();
             player_script.playerName = game_player.GetDisplayName();
+            player_script.networkGamePlayerIdentity = conn.identity;
 
             NetworkServer.Spawn(playerInstance, conn);
 

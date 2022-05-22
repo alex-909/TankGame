@@ -10,6 +10,7 @@ using DapperDino.Tutorials.Lobby;
 public class PlayerScript : NetworkBehaviour
 {
 	[SyncVar] public string playerName;
+	public NetworkIdentity networkGamePlayerIdentity;
 
 	[SerializeField] float speed;
 	[SerializeField] float rotationSpeed;

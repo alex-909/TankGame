@@ -87,7 +87,7 @@ public class DeathManager : NetworkBehaviour
 			if (AlivePlayers[i].Equals(player))
 			{
 				//Debug.Log("found the player");
-				PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Deaths, player.netIdentity.connectionToClient);
+				PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Deaths, player.networkGamePlayerIdentity);
 
 				DeadPlayers.Add(player);
 				AlivePlayers.Remove(player);
@@ -97,7 +97,7 @@ public class DeathManager : NetworkBehaviour
 			}
 		}
 	}
-	public void PlayerGotKill(NetworkConnection player) 
+	public void PlayerGotKill(NetworkIdentity player) 
 	{
 		PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Kills, player);
 	}
@@ -112,7 +112,7 @@ public class DeathManager : NetworkBehaviour
 	{
 		if (AlivePlayers.Count > 1) { return; }
 
-		PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.RoundsWon, AlivePlayers[0].netIdentity.connectionToClient);
+		PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.RoundsWon, AlivePlayers[0].networkGamePlayerIdentity);
 		//SendScoreUpdate();
 		RpcShowWinner(AlivePlayers[0]);
 	}
