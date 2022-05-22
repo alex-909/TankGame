@@ -1,5 +1,4 @@
-﻿using DapperDino.Tutorials.Lobby.Inputs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace DapperDino.Tutorials.Lobby

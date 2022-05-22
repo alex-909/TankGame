@@ -46,17 +46,6 @@ public class CreateMap : NetworkBehaviour
 		GenerateMap();
 		wallParent.transform.position = offset;
 	}
-	/*
-	void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			DeleteOldMap();
-			GenerateMap();
-			wallParent.transform.position = offset;
-		}
-	}
-	*/
 	void GenerateMap()
 	{
 		mapArray = GetMapArray();

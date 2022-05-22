@@ -3,6 +3,7 @@ using DapperDino.Mirror.Tutorials.Lobby;
 using Mirror;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace DapperDino.Tutorials.Lobby
 {
@@ -60,6 +61,8 @@ namespace DapperDino.Tutorials.Lobby
         private void CheckToStartRound(NetworkConnection conn)
         {
             if (Room.GamePlayers.Count(x => x.connectionToClient.isReady) != Room.GamePlayers.Count) { return; }
+
+            if (SceneManager.GetActiveScene().name.Equals(SceneNames.Scene_Map_02_Playground)) { StartRound(); return; }
 
             animator.enabled = true;
             animator.SetTrigger(triggerName);

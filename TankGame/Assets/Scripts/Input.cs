@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace DapperDino.Tutorials.Lobby.Inputs
+public class @Controls : IInputActionCollection, IDisposable
 {
-    public class @Controls : IInputActionCollection, IDisposable
+    public InputActionAsset asset { get; }
+    public @Controls()
     {
-        public InputActionAsset asset { get; }
-        public @Controls()
-        {
-            asset = InputActionAsset.FromJson(@"{
+        asset = InputActionAsset.FromJson(@"{
     ""name"": ""Controls"",
     ""maps"": [
         {
@@ -164,129 +162,128 @@ namespace DapperDino.Tutorials.Lobby.Inputs
         }
     ]
 }");
-            // PlayerMap
-            m_PlayerMap = asset.FindActionMap("PlayerMap", throwIfNotFound: true);
-            m_PlayerMap_Aim = m_PlayerMap.FindAction("Aim", throwIfNotFound: true);
-            m_PlayerMap_Move = m_PlayerMap.FindAction("Move", throwIfNotFound: true);
-            m_PlayerMap_Shoot = m_PlayerMap.FindAction("Shoot", throwIfNotFound: true);
-            m_PlayerMap_Missile = m_PlayerMap.FindAction("Missile", throwIfNotFound: true);
-        }
-
-        public void Dispose()
-        {
-            UnityEngine.Object.Destroy(asset);
-        }
-
-        public InputBinding? bindingMask
-        {
-            get => asset.bindingMask;
-            set => asset.bindingMask = value;
-        }
-
-        public ReadOnlyArray<InputDevice>? devices
-        {
-            get => asset.devices;
-            set => asset.devices = value;
-        }
-
-        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-        public bool Contains(InputAction action)
-        {
-            return asset.Contains(action);
-        }
-
-        public IEnumerator<InputAction> GetEnumerator()
-        {
-            return asset.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Enable()
-        {
-            asset.Enable();
-        }
-
-        public void Disable()
-        {
-            asset.Disable();
-        }
-
         // PlayerMap
-        private readonly InputActionMap m_PlayerMap;
-        private IPlayerMapActions m_PlayerMapActionsCallbackInterface;
-        private readonly InputAction m_PlayerMap_Aim;
-        private readonly InputAction m_PlayerMap_Move;
-        private readonly InputAction m_PlayerMap_Shoot;
-        private readonly InputAction m_PlayerMap_Missile;
-        public struct PlayerMapActions
+        m_PlayerMap = asset.FindActionMap("PlayerMap", throwIfNotFound: true);
+        m_PlayerMap_Aim = m_PlayerMap.FindAction("Aim", throwIfNotFound: true);
+        m_PlayerMap_Move = m_PlayerMap.FindAction("Move", throwIfNotFound: true);
+        m_PlayerMap_Shoot = m_PlayerMap.FindAction("Shoot", throwIfNotFound: true);
+        m_PlayerMap_Missile = m_PlayerMap.FindAction("Missile", throwIfNotFound: true);
+    }
+
+    public void Dispose()
+    {
+        UnityEngine.Object.Destroy(asset);
+    }
+
+    public InputBinding? bindingMask
+    {
+        get => asset.bindingMask;
+        set => asset.bindingMask = value;
+    }
+
+    public ReadOnlyArray<InputDevice>? devices
+    {
+        get => asset.devices;
+        set => asset.devices = value;
+    }
+
+    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+    public bool Contains(InputAction action)
+    {
+        return asset.Contains(action);
+    }
+
+    public IEnumerator<InputAction> GetEnumerator()
+    {
+        return asset.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public void Enable()
+    {
+        asset.Enable();
+    }
+
+    public void Disable()
+    {
+        asset.Disable();
+    }
+
+    // PlayerMap
+    private readonly InputActionMap m_PlayerMap;
+    private IPlayerMapActions m_PlayerMapActionsCallbackInterface;
+    private readonly InputAction m_PlayerMap_Aim;
+    private readonly InputAction m_PlayerMap_Move;
+    private readonly InputAction m_PlayerMap_Shoot;
+    private readonly InputAction m_PlayerMap_Missile;
+    public struct PlayerMapActions
+    {
+        private @Controls m_Wrapper;
+        public PlayerMapActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Aim => m_Wrapper.m_PlayerMap_Aim;
+        public InputAction @Move => m_Wrapper.m_PlayerMap_Move;
+        public InputAction @Shoot => m_Wrapper.m_PlayerMap_Shoot;
+        public InputAction @Missile => m_Wrapper.m_PlayerMap_Missile;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerMap; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PlayerMapActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerMapActions instance)
         {
-            private @Controls m_Wrapper;
-            public PlayerMapActions(@Controls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Aim => m_Wrapper.m_PlayerMap_Aim;
-            public InputAction @Move => m_Wrapper.m_PlayerMap_Move;
-            public InputAction @Shoot => m_Wrapper.m_PlayerMap_Shoot;
-            public InputAction @Missile => m_Wrapper.m_PlayerMap_Missile;
-            public InputActionMap Get() { return m_Wrapper.m_PlayerMap; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(PlayerMapActions set) { return set.Get(); }
-            public void SetCallbacks(IPlayerMapActions instance)
+            if (m_Wrapper.m_PlayerMapActionsCallbackInterface != null)
             {
-                if (m_Wrapper.m_PlayerMapActionsCallbackInterface != null)
-                {
-                    @Aim.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
-                    @Aim.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
-                    @Aim.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
-                    @Move.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
-                    @Move.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
-                    @Move.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
-                    @Shoot.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
-                    @Shoot.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
-                    @Shoot.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
-                    @Missile.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
-                    @Missile.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
-                    @Missile.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
-                }
-                m_Wrapper.m_PlayerMapActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @Aim.started += instance.OnAim;
-                    @Aim.performed += instance.OnAim;
-                    @Aim.canceled += instance.OnAim;
-                    @Move.started += instance.OnMove;
-                    @Move.performed += instance.OnMove;
-                    @Move.canceled += instance.OnMove;
-                    @Shoot.started += instance.OnShoot;
-                    @Shoot.performed += instance.OnShoot;
-                    @Shoot.canceled += instance.OnShoot;
-                    @Missile.started += instance.OnMissile;
-                    @Missile.performed += instance.OnMissile;
-                    @Missile.canceled += instance.OnMissile;
-                }
+                @Aim.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnAim;
+                @Move.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
+                @Move.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
+                @Move.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMove;
+                @Shoot.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnShoot;
+                @Missile.started -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
+                @Missile.performed -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
+                @Missile.canceled -= m_Wrapper.m_PlayerMapActionsCallbackInterface.OnMissile;
+            }
+            m_Wrapper.m_PlayerMapActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
+                @Missile.started += instance.OnMissile;
+                @Missile.performed += instance.OnMissile;
+                @Missile.canceled += instance.OnMissile;
             }
         }
-        public PlayerMapActions @PlayerMap => new PlayerMapActions(this);
-        private int m_KeyboardMouseSchemeIndex = -1;
-        public InputControlScheme KeyboardMouseScheme
+    }
+    public PlayerMapActions @PlayerMap => new PlayerMapActions(this);
+    private int m_KeyboardMouseSchemeIndex = -1;
+    public InputControlScheme KeyboardMouseScheme
+    {
+        get
         {
-            get
-            {
-                if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard & Mouse");
-                return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
-            }
+            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard & Mouse");
+            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
         }
-        public interface IPlayerMapActions
-        {
-            void OnAim(InputAction.CallbackContext context);
-            void OnMove(InputAction.CallbackContext context);
-            void OnShoot(InputAction.CallbackContext context);
-            void OnMissile(InputAction.CallbackContext context);
-        }
+    }
+    public interface IPlayerMapActions
+    {
+        void OnAim(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnMissile(InputAction.CallbackContext context);
     }
 }

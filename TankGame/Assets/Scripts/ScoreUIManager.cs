@@ -2,44 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Mirror;
 
-public class ScoreManager : MonoBehaviour
+public class ScoreUIManager : NetworkBehaviour
 {
-    public class ScoreInfo
-    {
-        public string name;
-        public int roundsWon;
-        public int kills;
-        public int deaths;
-        public Color color;
-    }
-
     public GameObject ScoreUI;
 
     public GameObject[] scoreObjects;
 
-    public void UpdateScores(ScoreInfo[] scoreInfos) 
+    [Command(requiresAuthority = false)]
+    public void UpdateScores(PlayerScore[] scoreInfos) 
+    {
+        UpdateClientScores(scoreInfos);
+    }
+    [ClientRpc]
+    public void UpdateClientScores(PlayerScore[] scoreInfos) 
     {
         //deactivate all texts
-        foreach (GameObject scoreObj in scoreObjects) 
+        foreach (GameObject scoreObj in scoreObjects)
         {
             scoreObj.SetActive(false);
         }
 
-        List<ScoreInfo> infos = scoreInfos.ToList<ScoreInfo>();
+        List<PlayerScore> infos = scoreInfos.ToList();
         scoreInfos = infos.OrderByDescending(x => x.roundsWon).ToArray();
 
-        for (int i = 0; i < scoreInfos.Length; i++) 
+        for (int i = 0; i < scoreInfos.Length; i++)
         {
             scoreObjects[i].SetActive(true);
 
             var scoreImageText = scoreObjects[i].GetComponent<ScoreImageText>();
             var s = scoreInfos[i];
-            scoreImageText.SetScoreUI(s.name, s.roundsWon, s.kills, s.deaths, s.color);
+            scoreImageText.SetScoreUI(s.playerName, s.roundsWon, s.kills, s.deaths, s.playerColor);
         }
-
     }
-
     void FixedUpdate()
     {
         bool pressed = Input.GetKey(KeyCode.Tab);

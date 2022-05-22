@@ -277,7 +277,6 @@ GameObject:
   - component: {fileID: 6339469827453674123}
   - component: {fileID: 385765768398217846}
   - component: {fileID: 331023925770684779}
-  - component: {fileID: 480203238119808150}
   - component: {fileID: 5588158009632950081}
   m_Layer: 2
   m_Name: Player
@@ -553,20 +552,6 @@ MonoBehaviour:
   tankColor: 0
   Cannon: {fileID: 5136132721029728379}
   TankBase: {fileID: 5385940756700504310}
---- !u!114 &480203238119808150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1784895279461645808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c06279290d8b87b4a8d87904135a79b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
 --- !u!114 &5588158009632950081
 MonoBehaviour:
   m_ObjectHideFlags: 0

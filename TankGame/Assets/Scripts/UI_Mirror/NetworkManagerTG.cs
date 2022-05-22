@@ -22,6 +22,7 @@ namespace DapperDino.Mirror.Tutorials.Lobby
         [Header("Game")]
         [SerializeField] private NetworkGamePlayerTG gamePlayerPrefab = null;
         [SerializeField] private GameObject playerSpawnSystem = null;
+        [SerializeField] private GameObject playerScoreSystem = null;
         [SerializeField] private GameObject mapCreatorSystem = null;
         [SerializeField] private GameObject roundSystem = null;
         [SerializeField] private GameObject deathManager = null;
@@ -141,7 +142,7 @@ namespace DapperDino.Mirror.Tutorials.Lobby
             return true;
         }
 
-        public void StartGame()
+        public void StartGame(String sceneName)
         {
             if (SceneManager.GetActiveScene().name == menuScene)
             {
@@ -151,7 +152,7 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 
                 //ServerChangeScene(mapHandler.NextMap);
                 //Debug.Log("in start game method");
-                ServerChangeScene("Scene_Map_01");
+                ServerChangeScene(sceneName);
             }
         }
 
@@ -170,9 +171,12 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 
                     //switch roomplayer to gameplayer with same connection
                     NetworkServer.Destroy(conn.identity.gameObject);
-
                     NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
                 }
+
+                GameObject playerScoreManager = Instantiate(playerScoreSystem);
+                NetworkServer.Spawn(playerScoreManager);
+                DontDestroyOnLoad(playerScoreManager);
             }
             else if (newSceneName.StartsWith("Scene_Map"))
             {
@@ -184,7 +188,21 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 
         public override void OnServerSceneChanged(string sceneName)
         {
-            if (sceneName.StartsWith("Scene_Map"))
+            if (sceneName.Equals(SceneNames.Scene_Map_02_Playground)) 
+            {
+                GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
+                NetworkServer.Spawn(playerSpawnSystemInstance);
+
+                GameObject roundSystemInstance = Instantiate(roundSystem);
+                NetworkServer.Spawn(roundSystemInstance);
+
+                GameObject deathManagerInstance = Instantiate(deathManager);
+                NetworkServer.Spawn(deathManagerInstance);
+
+                GameObject scoreManagerInstance = Instantiate(scoreManager);
+                NetworkServer.Spawn(scoreManagerInstance);
+            }
+            else if (sceneName.StartsWith("Scene_Map"))
             {
                 //doesnt need to stay between scenes: (Spawnsystem | mapCreatorSystem | roundSystem)
                 GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);

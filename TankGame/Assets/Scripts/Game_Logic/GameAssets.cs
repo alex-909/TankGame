@@ -13,8 +13,8 @@ public class GameAssets : MonoBehaviour
             return _i;
         }
     }
-
-    public TankMaterial[] tankMaterials;
+	#region TankMaterials
+	public TankMaterial[] tankMaterials;
 
     [System.Serializable]
     public class TankMaterial
@@ -37,4 +37,27 @@ public class GameAssets : MonoBehaviour
         Debug.LogError("Tank Color not found!");
         return (tankMaterials[0].cannonMaterial, tankMaterials[0].cannonMaterial);
     }
+    #endregion
+
+
+    #region TankColors
+    [Header("Colors")]
+
+    [SerializeField] Color blueColor;
+    [SerializeField] Color redColor;
+    [SerializeField] Color greenColor;
+    [SerializeField] Color yellowColor;
+
+    public Color GetColor(TankColor tankColor)
+    {
+        return tankColor switch
+        {
+            TankColor.Blue => blueColor,
+            TankColor.Red => redColor,
+            TankColor.Green => greenColor,
+            TankColor.Yellow => yellowColor,
+            _ => Color.white,
+        };
+    }
+    #endregion
 }

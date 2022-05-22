@@ -263,6 +263,7 @@ MonoBehaviour:
   roomPlayerPrefab: {fileID: 650128358642849997, guid: 79c2fc6f4553fe94a93ef0fc928fe1ac, type: 3}
   gamePlayerPrefab: {fileID: 6249285359111304801, guid: 82f54d6fc9145d54e9c7d37de2ebbe86, type: 3}
   playerSpawnSystem: {fileID: 6629867960589997966, guid: e2cf6016018c8104dbb5db3439cebc90, type: 3}
+  playerScoreSystem: {fileID: 4899448906579189017, guid: 2e905e7e3389ce540bc35d30660c52ba, type: 3}
   mapCreatorSystem: {fileID: 7732368612364930804, guid: 6778a485de4a020488cd38e51faacf27, type: 3}
   roundSystem: {fileID: 7318296775627505269, guid: 51037daa93f019e45acae823c84c9485, type: 3}
   deathManager: {fileID: 4681790003587954713, guid: e3982813da3f12c46888adad68e0d1b9, type: 3}

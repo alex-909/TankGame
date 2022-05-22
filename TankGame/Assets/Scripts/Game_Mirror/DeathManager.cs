@@ -4,7 +4,7 @@ using Mirror;
 using DapperDino.Mirror.Tutorials.Lobby;
 using DapperDino.Tutorials.Lobby;
 using TMPro;
-using System;
+using UnityEngine.SceneManagement;
 using System.Linq;
 
 public class DeathManager : NetworkBehaviour
@@ -41,6 +41,15 @@ public class DeathManager : NetworkBehaviour
 		}
 	}
 
+	private PlayerScoreManager playerScoreManager;
+	private PlayerScoreManager PlayerScoreManager
+	{
+		get 
+		{
+			if (playerScoreManager != null) { return playerScoreManager; }
+			return playerScoreManager = FindObjectOfType<PlayerScoreManager>();
+		}
+	}
 	#endregion
 
 	public List<PlayerScript> AllPlayers { get; } = new List<PlayerScript>();
@@ -51,11 +60,6 @@ public class DeathManager : NetworkBehaviour
 	[SerializeField] private GameObject WinnerUI;
 	private string triggerName = "Active";
 
-	[SerializeField] Color blueColor;
-	[SerializeField] Color redColor;
-	[SerializeField] Color greenColor;
-	[SerializeField] Color yellowColor;
-
 	[Server]
 	public void Register(PlayerScript player)
 	{
@@ -63,46 +67,19 @@ public class DeathManager : NetworkBehaviour
 		AlivePlayers.Add(player);
 		AllPlayers.Add(player);
 
-		SendScoreUpdate();
-	}
-
-	#region Score
-	[Server]
-	public void SendScoreUpdate()
-	{
-		List<ScoreManager.ScoreInfo> scoreInfos = new List<ScoreManager.ScoreInfo>();
-
-		foreach (PlayerScript player in AllPlayers)
+		if (AllPlayers.Count == Room.GamePlayers.Count) 
 		{
-			var playerScore = player.GetComponent<PlayerScore>();
-			ScoreManager.ScoreInfo info = new ScoreManager.ScoreInfo
-			{
-				name = player.playerName,
-				roundsWon = playerScore.GetStat(PlayerScore.Stat.RoundsWon),
-				kills = playerScore.GetStat(PlayerScore.Stat.Kills),
-				deaths = playerScore.GetStat(PlayerScore.Stat.Deaths),
-				color = GetColor(player.GetComponent<ApplyMaterials>().tankColor)
-			};
-
-			scoreInfos.Add(info);
+			PlayerScoreManager.SendPlayerList(AllPlayers.ToArray());
 		}
-		scoreInfos = scoreInfos.OrderByDescending(x => x.roundsWon).ToList<ScoreManager.ScoreInfo>();
-
-		RpcSendScoreUpdate(scoreInfos.ToArray());
+		//SendScoreUpdate();
 	}
 
-	[ClientRpc] 
-	private void RpcSendScoreUpdate(ScoreManager.ScoreInfo[] scoreInfos)
-	{
-		ScoreManager scoreManager = FindObjectOfType<ScoreManager>();
-		scoreManager.UpdateScores(scoreInfos);
-	}
-	#endregion
+	
 
 	#region PlayerDeath
 	public void Died(PlayerScript player)
 	{
-		SendScoreUpdate();
+		//SendScoreUpdate();
 		//Debug.Log("Player died!");
 
 		for (int i = 0; i < AlivePlayers.Count; i++)
@@ -110,6 +87,8 @@ public class DeathManager : NetworkBehaviour
 			if (AlivePlayers[i].Equals(player))
 			{
 				//Debug.Log("found the player");
+				PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Deaths, player.netIdentity.connectionToClient);
+
 				DeadPlayers.Add(player);
 				AlivePlayers.Remove(player);
 
@@ -117,6 +96,10 @@ public class DeathManager : NetworkBehaviour
 				CheckForRestart();
 			}
 		}
+	}
+	public void PlayerGotKill(NetworkConnection player) 
+	{
+		PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Kills, player);
 	}
 	[ClientRpc]
 	private void RpcDisablePlayer(PlayerScript player)
@@ -129,12 +112,11 @@ public class DeathManager : NetworkBehaviour
 	{
 		if (AlivePlayers.Count > 1) { return; }
 
-		AlivePlayers[0].ScoreManager.IncreaseStat(PlayerScore.Stat.RoundsWon);
-		SendScoreUpdate();
+		PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.RoundsWon, AlivePlayers[0].netIdentity.connectionToClient);
+		//SendScoreUpdate();
 		RpcShowWinner(AlivePlayers[0]);
 	}
 	#endregion
-
 
 	#region Winner + Animation
 
@@ -144,7 +126,7 @@ public class DeathManager : NetworkBehaviour
 		CmdDestroyAllBullets();
 
 		var textColor = WinnerUI.GetComponent<TextMeshProUGUI>();
-		textColor.color = GetColor(player.GetComponent<ApplyMaterials>().tankColor);
+		textColor.color = GameAssets.i.GetColor(player.GetComponent<ApplyMaterials>().tankColor);
 		textColor.text = $"{player.playerName} has won the Round!";
 
 		animator.enabled = true;
@@ -162,19 +144,14 @@ public class DeathManager : NetworkBehaviour
 	[Command(requiresAuthority = false)]
 	private void CmdReloadScene() 
 	{
-		Room.ServerChangeScene("Scene_Map_01");
-	}
-
-	private Color GetColor(TankColor tankColor)
-	{
-		return tankColor switch
+		if (SceneManager.GetActiveScene().name.Equals(SceneNames.Scene_Map_02_Playground))
 		{
-			TankColor.Blue => blueColor,
-			TankColor.Red => redColor,
-			TankColor.Green => greenColor,
-			TankColor.Yellow => yellowColor,
-			_ => Color.white,
-		};
+			Room.ServerChangeScene(SceneNames.Scene_Map_02_Playground);
+		}
+		else 
+		{
+			Room.ServerChangeScene(SceneNames.Scene_Map_01);
+		}
 	}
 
 	#endregion

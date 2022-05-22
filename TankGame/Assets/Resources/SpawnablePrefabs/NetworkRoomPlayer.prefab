@@ -187,6 +187,11 @@ MonoBehaviour:
   gameModeDropdown: {fileID: 1306095370109870258}
   DisplayName: Loading...
   IsReady: 0
+  gamemodes:
+  - index: 0
+    sceneName: Scene_Map_01
+  - index: 1
+    sceneName: Scene_Map_02_Playground
 --- !u!1 &724838626616596782
 GameObject:
   m_ObjectHideFlags: 0

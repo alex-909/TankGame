@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
-using DapperDino.Tutorials.Lobby.Inputs;
 using DapperDino.Tutorials.Lobby;
 
 public class PlayerShoot : NetworkBehaviour
@@ -49,6 +48,13 @@ public class PlayerShoot : NetworkBehaviour
         {
             if (controls != null) { return controls; }
             return controls = new Controls();
+        }
+    }
+    private DeathManager DeathManager
+    {
+        get
+        {
+            return (DeathManager)FindObjectOfType(typeof(DeathManager));
         }
     }
     public override void OnStartAuthority()
@@ -147,7 +153,7 @@ public class PlayerShoot : NetworkBehaviour
     private void GotKill() 
     {
         Debug.Log("registered kill in playershoot");
-        this.GetComponent<PlayerScore>().IncreaseStat(PlayerScore.Stat.Kills);
+        DeathManager.PlayerGotKill(this.netIdentity.connectionToClient);
     }
     private void GotPlayerHit()
     {

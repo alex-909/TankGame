@@ -19,6 +19,15 @@ namespace DapperDino.Mirror.Tutorials.Lobby
         [SyncVar(hook = nameof(HandleReadyStatusChanged))]
         public bool IsReady = false;
 
+        [System.Serializable]
+        public class DropdownGamemode
+        {
+            public int index;
+            public string sceneName;
+        }
+
+		[SerializeField] public DropdownGamemode[] gamemodes;
+        
         private bool isLeader;
         public bool IsLeader
         {
@@ -100,7 +109,6 @@ namespace DapperDino.Mirror.Tutorials.Lobby
             if (!isLeader) { return; }
 
             startGameButton.interactable = readyToStart;
-            gameModeDropdown.interactable = readyToStart;
         }
 
         [Command]
@@ -122,7 +130,12 @@ namespace DapperDino.Mirror.Tutorials.Lobby
         {
             if (Room.RoomPlayers[0].connectionToClient != connectionToClient) { return; }
 
-            Room.StartGame();
+            string scene = GameModeToString();
+            Room.StartGame(scene);
+        }
+        private string GameModeToString() 
+        {
+            return gamemodes[gameModeDropdown.value].sceneName;
         }
     }
 }
