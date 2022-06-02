@@ -7,9 +7,10 @@ public class AmmoUI : MonoBehaviour
 {
     public float spacing;
     public Image imagePrefab;
+    public Image missileImage;
     private Image[] ammoImages;
 
-	public void createUI(int ammo) 
+	public void CreateUI(int ammo) 
     {
         float minX = this.transform.position.x - ((ammo - 1) * spacing * 0.5f);
         ammoImages = new Image[ammo];
@@ -17,7 +18,7 @@ public class AmmoUI : MonoBehaviour
         {
             var img = Instantiate(imagePrefab, this.transform);
             var rect = this.GetComponent<RectTransform>();
-            float x = minX +  spacing * i;
+            float x = minX + (spacing * i);
             float y = rect.position.y;
             float z = rect.position.z;
             img.rectTransform.position = new Vector3(x,y,z);
@@ -39,5 +40,9 @@ public class AmmoUI : MonoBehaviour
                 img.gameObject.SetActive(false);
             }
         }
+    }
+    public void UpdateMissile(int currentMissile) 
+    {
+        missileImage.enabled = (currentMissile > 0);
     }
 }

@@ -24,6 +24,7 @@ public class PlayerShoot : NetworkBehaviour
     [SerializeField] GameObject missile;
     public float missileCooldown;
     public float missileOffset;
+    public int maxMissile;
 
     [Header("Ammo")]
     public LineController lc;
@@ -32,9 +33,12 @@ public class PlayerShoot : NetworkBehaviour
     [Space]
     public float ammoCooldown;
     public int maxAmmo;
+    
 
-    private float fTimer = 0;
+    private float timer_ammo = 0;
+    private float timer_missile = 0;
     private int ammo;
+    private int missiles;
     // Update is called once per frame
     int hits = 0;
 	private void Awake()
@@ -63,7 +67,7 @@ public class PlayerShoot : NetworkBehaviour
         {
             ammoCanvas.SetActive(true);
         }
-        ammoUI.createUI(maxAmmo);
+        ammoUI.CreateUI(maxAmmo);
         lc.SetUpLine(spawn);
         lc.SetLineEnabled(false);
 
@@ -88,16 +92,24 @@ public class PlayerShoot : NetworkBehaviour
     [Client]
     private void SetPressedMissile() 
     {
-        Vector3 pos = playerScript.MousePosition;
-        CmdSpawnMissile(pos);
+        if (missiles > 0) 
+        {
+            missiles--;
+            Debug.Log("created missile");
+            Vector3 pos = playerScript.MousePosition;
+            CmdSpawnMissile(pos);
+        }
+        ammoUI.UpdateMissile(missiles);
     }
     void Update()
     {
         if (!hasAuthority) { return; }
 
-        ReloadBullets();
+		ReloadBullets();
+        ReloadMissile();
 
-        ammoUI.UpdateAmmo(ammo);
+		ammoUI.UpdateAmmo(ammo);
+        ammoUI.UpdateMissile(missiles);
 
         CheckLineRenderer();
     }
@@ -109,21 +121,40 @@ public class PlayerShoot : NetworkBehaviour
     }
     private void ReloadBullets() 
     {
+        Debug.Log($"missiles: {missiles}");
         if (ammo < maxAmmo)
         {
-            fTimer += Time.deltaTime;
-            if (fTimer > ammoCooldown)
+            timer_ammo += Time.deltaTime;
+            if (timer_ammo > ammoCooldown)
             {
-                fTimer = 0;
+                timer_ammo = 0;
                 ammo++;
             }
         }
         else
         {
-            fTimer = 0;
+            timer_ammo = 0;
         }
 
         if (ammo > maxAmmo) ammo = maxAmmo;
+    }
+    private void ReloadMissile() 
+    {
+        if (missiles < maxMissile)
+        {
+            timer_missile += Time.deltaTime;
+            if (timer_missile > missileCooldown)
+            {
+                timer_missile = 0;
+                missiles++;
+            }
+        }
+        else
+        {
+            timer_missile = 0;
+        }
+
+        if (missiles > maxMissile) missiles = maxMissile;
     }
 
     [Command]
