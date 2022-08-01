@@ -268,6 +268,7 @@ MonoBehaviour:
   roundSystem: {fileID: 7318296775627505269, guid: 51037daa93f019e45acae823c84c9485, type: 3}
   deathManager: {fileID: 4681790003587954713, guid: e3982813da3f12c46888adad68e0d1b9, type: 3}
   scoreManager: {fileID: 9040636721099939077, guid: b5a9188ba67f4144885d4d7d5060e23d, type: 3}
+  powerUpSpawner: {fileID: 553029749096016940, guid: 22b6776e27b932346b7e6cbd2e8dd1ef, type: 3}
 --- !u!4 &325552351
 Transform:
   m_ObjectHideFlags: 0

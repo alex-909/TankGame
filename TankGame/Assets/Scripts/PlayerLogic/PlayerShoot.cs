@@ -33,17 +33,22 @@ public class PlayerShoot : NetworkBehaviour
     [Space]
     public float ammoCooldown;
     public int maxAmmo;
+    public int extraAmmo;
     
 
     private float timer_ammo = 0;
     private float timer_missile = 0;
     private int ammo;
     private int missiles;
+
+    private PowerUpManagerPlayer powerUpManager;
     // Update is called once per frame
     int hits = 0;
 	private void Awake()
 	{
         lc = GameObject.FindGameObjectWithTag("LR").GetComponent<LineController>();
+        powerUpManager = this.GetComponent<PowerUpManagerPlayer>();
+        powerUpManager.GotPowerUp += OnPowerUpGot;
 	}
     private Controls controls;
     private Controls Controls
@@ -59,6 +64,17 @@ public class PlayerShoot : NetworkBehaviour
         get
         {
             return (DeathManager)FindObjectOfType(typeof(DeathManager));
+        }
+    }
+    public void OnPowerUpGot(object sender, PowerUpEventArgs e) 
+    {
+        if (e.PowerUpType == PowerUpType.ExtraBullet) 
+        {
+            ammoUI.DeleteUI();
+            maxAmmo += extraAmmo;
+            ammoUI.CreateUI(maxAmmo);
+            ammo = maxAmmo;
+            ammoUI.UpdateAmmo(ammo);
         }
     }
     public override void OnStartAuthority()
@@ -121,14 +137,26 @@ public class PlayerShoot : NetworkBehaviour
     }
     private void ReloadBullets() 
     {
-        Debug.Log($"missiles: {missiles}");
+        //Debug.Log($"missiles: {missiles}");
         if (ammo < maxAmmo)
         {
             timer_ammo += Time.deltaTime;
-            if (timer_ammo > ammoCooldown)
+            bool fastReload = powerUpManager.HasPowerUp(PowerUpType.FastReload);
+            if (fastReload)
             {
-                timer_ammo = 0;
-                ammo++;
+                if (timer_ammo > (ammoCooldown / 2))
+                {
+                    timer_ammo = 0;
+                    ammo++;
+                }
+            }
+            else 
+            {
+                if (timer_ammo > ammoCooldown)
+                {
+                    timer_ammo = 0;
+                    ammo++;
+                }
             }
         }
         else

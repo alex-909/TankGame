@@ -1,10 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PowerUpManagerPlayer : MonoBehaviour
 {
-    private List<PowerUpInfo> ActivePowerUps;
+    [SerializeField] private List<PowerUpInfo> ActivePowerUps = new List<PowerUpInfo>();
+
+    public event EventHandler<PowerUpEventArgs> GotPowerUp;
+
+    private PowerUp_UI powerUp_UI;
+    private PowerUp_UI PowerUp_UI 
+    {
+        get 
+        {
+            if (powerUp_UI != null) { return powerUp_UI; }
+            powerUp_UI = FindObjectOfType<PowerUp_UI>();
+            return powerUp_UI;
+        }
+    }
+
+
 	private void Update()
 	{
         foreach (PowerUpInfo info in ActivePowerUps) 
@@ -17,6 +33,7 @@ public class PowerUpManagerPlayer : MonoBehaviour
             if (info.TimeOver()) 
             {
                 RemovePowerUp(info.powerUpType);
+                break;
             }
         }
 	}
@@ -24,10 +41,13 @@ public class PowerUpManagerPlayer : MonoBehaviour
     {
         RemovePowerUp(info.powerUpType);
         ActivePowerUps.Add(info);
-    }
-    public void RemovePowerUp(PowerUpType type) 
+        UpdatePowerUpUI();
+		GotPowerUp?.Invoke(this, new PowerUpEventArgs(info.powerUpType));
+	}
+    public void RemovePowerUp(PowerUpType type)
     {
         ActivePowerUps.RemoveAll(a => a.powerUpType == type);
+        UpdatePowerUpUI();
     }
     public bool HasPowerUp(PowerUpType type)
     {
@@ -43,6 +63,6 @@ public class PowerUpManagerPlayer : MonoBehaviour
     }
     public void UpdatePowerUpUI() 
     {
-
+        PowerUp_UI.UpdateUI(ActivePowerUps.ToArray());
     }
 }

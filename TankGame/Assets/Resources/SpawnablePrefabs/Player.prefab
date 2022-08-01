@@ -279,6 +279,7 @@ GameObject:
   - component: {fileID: 385765768398217846}
   - component: {fileID: 331023925770684779}
   - component: {fileID: 5588158009632950081}
+  - component: {fileID: 3490658173528603993}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -321,7 +322,8 @@ MonoBehaviour:
   syncInterval: 0.1
   playerName: 
   networkGamePlayerIdentity: {fileID: 0}
-  speed: 8
+  movementSpeed: 8
+  extraSpeed: 4
   rotationSpeed: 12
   cannon: {fileID: 1784895278327774435}
   body: {fileID: 1784895279443635509}
@@ -331,6 +333,7 @@ MonoBehaviour:
   healthManager: {fileID: 1784895279461645582}
   alive: 1
   rb: {fileID: 1784895279461645580}
+  powerUpManager: {fileID: 3490658173528603993}
   particleDamage: {fileID: 8108543067405446474}
   particleExplosion: {fileID: 4773057782360188852, guid: 5452121baca3fe64d8970891b036c230, type: 3}
   groundCheck: {fileID: 2466912588743502309}
@@ -373,6 +376,7 @@ MonoBehaviour:
   ammoCanvas: {fileID: 1784895278372989399}
   ammoCooldown: 1.5
   maxAmmo: 3
+  extraAmmo: 1
 --- !u!114 &1784895279461645582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,8 +389,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1ed4377f76a890429592e81aa2042a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  currentHealth: 0
+  maxHealth: 3
+  currentHealth: 3
+  extraHealth: 5
 --- !u!54 &1784895279461645580
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -568,6 +573,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerScript: {fileID: 1784895279461645809}
+--- !u!114 &3490658173528603993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1784895279461645808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b21ee63329721ec48aa60bde1afac2bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActivePowerUps: []
 --- !u!1 &1784895280235725068
 GameObject:
   m_ObjectHideFlags: 0

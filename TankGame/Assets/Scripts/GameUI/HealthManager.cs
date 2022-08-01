@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class HealthManager : MonoBehaviour
 {
 	public int maxHealth;
 	public int currentHealth;
+	[Header("with powerup:")]
+	public int extraHealth;
 
 	private HealthBar healthBarUI;
 	private HealthBar HealthBarUI
@@ -17,8 +20,16 @@ public class HealthManager : MonoBehaviour
 			return healthBarUI = GameObject.FindGameObjectWithTag("HEALTHBAR").GetComponent<HealthBar>();
 		}
 	}
+	public void OnGotPowerUp(object sender, PowerUpEventArgs e) 
+	{
+		if (e.PowerUpType == PowerUpType.BonusHealth) 
+		{
+			Initialize(extraHealth);
+		}
+	}
 	public void Initialize(int maxHP)
 	{
+		GetComponent<PowerUpManagerPlayer>().GotPowerUp += OnGotPowerUp;
 		maxHealth = maxHP;
 		currentHealth = maxHP;
 

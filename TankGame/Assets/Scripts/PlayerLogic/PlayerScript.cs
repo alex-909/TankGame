@@ -12,7 +12,9 @@ public class PlayerScript : NetworkBehaviour
 	[SyncVar] public string playerName;
 	public NetworkIdentity networkGamePlayerIdentity;
 
-	[SerializeField] float speed;
+	[SerializeField] float movementSpeed;
+	[SerializeField] float extraSpeed;
+	private float speed;
 	[SerializeField] float rotationSpeed;
 	[Space]
 	[SerializeField] Transform cannon;
@@ -26,6 +28,7 @@ public class PlayerScript : NetworkBehaviour
 
 
 	[SerializeField] private Rigidbody rb;
+	[SerializeField] private PowerUpManagerPlayer powerUpManager;
 
 	[Header("particles")]
 	[SerializeField] ParticleSystem particleDamage;
@@ -62,6 +65,7 @@ public class PlayerScript : NetworkBehaviour
 
 	private Vector2 previousInput;
 	private Vector2 mouseScreenPos;
+
 	private Controls controls;
 	private Controls Controls
 	{
@@ -182,6 +186,15 @@ public class PlayerScript : NetworkBehaviour
 			rb.AddForce(moveVector);
 			return;
 		}
+		if (powerUpManager.HasPowerUp(PowerUpType.ExtraSpeed))
+		{
+			speed = movementSpeed + extraSpeed;
+		}
+		else 
+		{
+			speed = movementSpeed;
+		}
+
 
 		rb.velocity = moveVector.normalized * speed;
 		if (rb.velocity.magnitude != 0)
@@ -394,7 +407,7 @@ public class PlayerScript : NetworkBehaviour
 	{
 		if (!hasAuthority) { return; }
 
-		if (other.gameObject.TryGetComponent<BulletMove>(out BulletMove b))
+		if (other.gameObject.TryGetComponent(out BulletMove b))
 		{
 			if (b.originPlayer == this.GetComponent<NetworkIdentity>().netId)
 			{
@@ -402,6 +415,12 @@ public class PlayerScript : NetworkBehaviour
 			}
 			HitByBullet(b);
 			CmdDestroyObject(other.gameObject);
+		}
+
+		if (other.gameObject.TryGetComponent(out PowerUpScript p)) 
+		{
+			powerUpManager.AddPowerUp(p.GetInfo());
+			CmdDestroyObject(p.gameObject);
 		}
 	}
 	[Command]

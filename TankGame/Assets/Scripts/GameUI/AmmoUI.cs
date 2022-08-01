@@ -10,6 +10,13 @@ public class AmmoUI : MonoBehaviour
     public Image missileImage;
     private Image[] ammoImages;
 
+    public void DeleteUI() 
+    {
+        foreach (Image img in ammoImages) 
+        {
+            Destroy(img.gameObject);
+        }
+    }
 	public void CreateUI(int ammo) 
     {
         float minX = this.transform.position.x - ((ammo - 1) * spacing * 0.5f);
@@ -25,7 +32,7 @@ public class AmmoUI : MonoBehaviour
             ammoImages[i] = img;
         }
     }
-    public void UpdateAmmo(int currentAmmo) 
+    public void UpdateAmmo(int currentAmmo)
     {
         int ammoIndex = currentAmmo - 1;
         for (int i = 0; i < ammoImages.Length; i++) 

@@ -27,6 +27,7 @@ namespace DapperDino.Mirror.Tutorials.Lobby
         [SerializeField] private GameObject roundSystem = null;
         [SerializeField] private GameObject deathManager = null;
         [SerializeField] private GameObject scoreManager = null;
+        [SerializeField] private GameObject powerUpSpawner = null;
 
         //private MapHandler mapHandler;
 
@@ -201,10 +202,13 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 
                 GameObject scoreManagerInstance = Instantiate(scoreManager);
                 NetworkServer.Spawn(scoreManagerInstance);
+
+                GameObject powerUpSpawnerInstance = Instantiate(powerUpSpawner);
+                NetworkServer.Spawn(powerUpSpawnerInstance);
             }
             else if (sceneName.StartsWith("Scene_Map"))
             {
-                //doesnt need to stay between scenes: (Spawnsystem | mapCreatorSystem | roundSystem)
+                //doesnt need to stay between scenes: (Spawnsystem | mapCreatorSystem | roundSystem | powerupSystem)
                 GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
                 NetworkServer.Spawn(playerSpawnSystemInstance);
 
@@ -219,6 +223,9 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 
                 GameObject scoreManagerInstance = Instantiate(scoreManager);
                 NetworkServer.Spawn(scoreManagerInstance);
+
+                GameObject powerUpSpawnerInstance = Instantiate(powerUpSpawner);
+                NetworkServer.Spawn(powerUpSpawnerInstance);
             }
         }
 
