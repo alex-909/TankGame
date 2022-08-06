@@ -242,7 +242,7 @@ Transform:
   m_GameObject: {fileID: 317904990}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: -14}
-  m_LocalScale: {x: 47, y: 10, z: 1}
+  m_LocalScale: {x: 47, y: 200, z: 1}
   m_Children: []
   m_Father: {fileID: 1574215548}
   m_RootOrder: 3
@@ -334,6 +334,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 329589676}
+  - component: {fileID: 329589677}
   m_Layer: 0
   m_Name: SpawnPoints
   m_TagString: Untagged
@@ -359,6 +360,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &329589677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329589675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7325149961f0e934885c21b8c6aaee7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points:
+  - {fileID: 2014455156}
+  - {fileID: 1424251659}
+  - {fileID: 2088093335}
+  - {fileID: 833274635}
+  colors: 00000000010000000200000003000000
 --- !u!1 &455956777
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,7 +706,7 @@ Transform:
   m_GameObject: {fileID: 599583353}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 24, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 10, z: 29}
+  m_LocalScale: {x: 1, y: 200, z: 29}
   m_Children: []
   m_Father: {fileID: 1574215548}
   m_RootOrder: 1
@@ -918,7 +937,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b899be654e534d24ba20aa7607a8df2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankColor: 3
+  tankColor: 0
 --- !u!1 &845262645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1325,7 +1344,7 @@ Transform:
   m_GameObject: {fileID: 1325268983}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.5, z: 14}
-  m_LocalScale: {x: 47, y: 10, z: 1}
+  m_LocalScale: {x: 47, y: 200, z: 1}
   m_Children: []
   m_Father: {fileID: 1574215548}
   m_RootOrder: 2
@@ -1559,7 +1578,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b899be654e534d24ba20aa7607a8df2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankColor: 1
+  tankColor: 0
 --- !u!1 &1477596716
 GameObject:
   m_ObjectHideFlags: 0
@@ -2551,7 +2570,7 @@ Transform:
   m_GameObject: {fileID: 1775657327}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -24, y: 1.5, z: 0}
-  m_LocalScale: {x: 1, y: 10, z: 29}
+  m_LocalScale: {x: 1, y: 200, z: 29}
   m_Children: []
   m_Father: {fileID: 1574215548}
   m_RootOrder: 0
@@ -3282,7 +3301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b899be654e534d24ba20aa7607a8df2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankColor: 2
+  tankColor: 0
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0

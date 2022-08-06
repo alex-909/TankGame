@@ -4,7 +4,6 @@ namespace DapperDino.Mirror.Tutorials.Lobby
 {
     public class PlayerSpawnPoint : MonoBehaviour
     {
-        private void Awake() => PlayerSpawnSystem.AddSpawnPoint(transform);
         private void OnDestroy() => PlayerSpawnSystem.RemoveSpawnPoint(transform);
 
         private void OnDrawGizmos()

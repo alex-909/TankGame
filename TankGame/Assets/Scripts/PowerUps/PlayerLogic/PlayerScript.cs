@@ -371,8 +371,6 @@ public class PlayerScript : NetworkBehaviour
 
 	private void Die()
 	{
-		//to be tested!
-		//this.GetComponent<PlayerScore>().IncreaseStat(PlayerScore.Stat.Deaths);
 		CmdDie();
 	}
 	[Command]

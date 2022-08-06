@@ -74,19 +74,31 @@ public class DeathManager : NetworkBehaviour
 		//SendScoreUpdate();
 	}
 
-	
+	//experimental!!
+	private void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.L)) 
+		{
+			RpcShowWinner(AlivePlayers[0]);
+		}
+	}
+
 
 	#region PlayerDeath
 	public void Died(PlayerScript player)
 	{
 		//SendScoreUpdate();
 		//Debug.Log("Player died!");
+		if (AlivePlayers.Count == 1) 
+		{
+			return;
+		}
 
 		for (int i = 0; i < AlivePlayers.Count; i++)
 		{
 			if (AlivePlayers[i].Equals(player))
 			{
-				//Debug.Log("found the player");
+				Debug.Log("found the player");
 				PlayerScoreManager.IncreaseStatInPlayer(PlayerStat.Deaths, player.networkGamePlayerIdentity);
 
 				DeadPlayers.Add(player);
@@ -94,8 +106,14 @@ public class DeathManager : NetworkBehaviour
 
 				RpcDisablePlayer(player);
 				CheckForRestart();
+				return;
+			}
+			else
+			{
+				Debug.Log("else part!");
 			}
 		}
+		Debug.LogError("didnt find player!");
 	}
 	public void PlayerGotKill(NetworkIdentity player) 
 	{
@@ -176,13 +194,6 @@ public class DeathManager : NetworkBehaviour
 	#endregion
 
 	#region Unused right now:
-
-	private static System.Random rng = new System.Random();
-	private Transform[] ShuffleSpawnPoints(List<Transform> points)
-	{
-		var shuffledPoints = points.OrderBy(a => rng.Next());
-		return shuffledPoints.ToArray<Transform>();
-	}
 
 	[ClientRpc]
 	private void RpcActivatePlayer(PlayerScript player)
